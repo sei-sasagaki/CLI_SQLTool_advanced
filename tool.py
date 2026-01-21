@@ -39,24 +39,34 @@ def add_new_user(new_name, new_age):
         print(f"Duplicated user name {new_name}")
 
 
-def Validation(new_name, new_age):
-    pass
-    # new_name = input("New user name > ")
-    # new_age = int(input("New user age > "))
+def valid_user(new_name, new_age):
+    """
+    要件：バリデーション
+    """
     # ブランクの場合
-    # if not new_name:
-    #     raise ValueError("User name can't be blank")
-    # if not new_age:
-    #     raise ValueError("User name can't be blank")
-    # # ユーザー名は1文字以上20文字以下であること
-    # if not (1 <= len(new_name) <= 20):
-    #     raise ValueError("User name is too long(maximun is 20 characters)")
-    # # 年齢は正の整数であること
-    # if new_age < 0 or isinstance(new_age, str) and "." in new_age:
-    #     raise ValueError("Age is not positive integer")
-    # # 年齢は0以上120以下であること
-    # if not (0 <= new_age <= 120):
-    #     raise ValueError("Age is grater than 120")
+    if not new_name:
+        print("User name can't be blank")
+        return False
+    if not new_age:
+        print("age can't be blank")
+        return False
+
+    # ユーザー名は1文字以上20文字以下であること
+    if not (1 <= len(new_name) <= 20):
+        print("User name is too long(maximun is 20 characters)")
+        return False
+
+    # 年齢は正の整数であること
+    if int(new_age) < 0 or isinstance(new_age, str) and "." in new_age:
+        print("Age is not positive integer")
+        return False
+
+    # 年齢は0以上120以下であること
+    if not (0 <= int(new_age) <= 120):
+        print("Age is grater than 120")
+        return False
+
+    return True
 
 
 def find_name():
@@ -92,7 +102,12 @@ def update_user():
     user = User.get_or_none(User.name == update_name)
     if user:
         new_name = input(f"New user name({user.name}) > ")
-        new_age = int(input(f"New user age({user.age}) > "))
+        new_age = input(f"New user age({user.age}) > ")
+
+        # 入力内容のバリデーション（Falseを返したらreturnする）
+        if not valid_user(new_name=new_name, new_age=new_age):
+            return
+
         user.name = new_name
         user.age = new_age
         user.save()
